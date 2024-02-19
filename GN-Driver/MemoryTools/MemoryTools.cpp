@@ -1026,7 +1026,6 @@ NTSTATUS MemoryTools::GetSystemVadRootOffset(PRTL_OSVERSIONINFOEXW os_info)
         {
             this->m_eprocess_vadroot_offset = 0x7D8;
             break;
-
         }
         else
             return 0;
