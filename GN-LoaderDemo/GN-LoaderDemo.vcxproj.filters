@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\MainFunc">
+      <UniqueIdentifier>{542ea106-a822-4cf4-bc40-f340623a09bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\MainFunc">
+      <UniqueIdentifier>{7706ac7c-0cc7-4509-a0ad-9ed57f034ef2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Driver">
+      <UniqueIdentifier>{6732a647-49a9-4e58-a3eb-8677ef23e031}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CrashDump">
+      <UniqueIdentifier>{11546f3f-15d3-4e52-8598-d14e8b433e32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VMProtectSDK">
+      <UniqueIdentifier>{cacf5386-7974-4b3b-a9f4-cd32a1bf0932}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="main.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFunc\MainFunc.h">
+      <Filter>头文件\MainFunc</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CrashDump\CrashDump.h">
+      <Filter>CrashDump</Filter>
+    </ClInclude>
+    <ClInclude Include="VMProtectSDK\VMProtectSDK.h">
+      <Filter>VMProtectSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GN-Driver-Lib\Driver\Driver.h">
+      <Filter>头文件\Driver</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFunc\MainFunc.cpp">
+      <Filter>源文件\MainFunc</Filter>
+    </ClCompile>
+    <ClCompile Include="CrashDump\CrashDump.cpp">
+      <Filter>CrashDump</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="VMProtectSDK\VMProtectSDK64.lib">
+      <Filter>VMProtectSDK</Filter>
+    </Library>
+  </ItemGroup>
+</Project>

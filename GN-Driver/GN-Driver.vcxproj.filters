@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="IRPControl">
+      <UniqueIdentifier>{97e28126-1dba-47f8-867f-219c9d28452e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minifilter">
+      <UniqueIdentifier>{d31c160d-5467-4b24-bcea-a7849c409ba9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{6d0a73ae-a7c2-40f0-93af-6c0d8e603286}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainFunction">
+      <UniqueIdentifier>{af4c7a05-0d05-40a2-aabd-cdabd9cc031c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MemoryTools">
+      <UniqueIdentifier>{fc605c34-08e5-4010-ad3f-db3fcf4e0650}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Driver">
+      <UniqueIdentifier>{e9c34944-88e3-4dd8-a11f-ec9add8bad0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HideDriver">
+      <UniqueIdentifier>{1b193592-fbab-4ad4-8270-bdcae8c4b839}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MemoryTools\VirtualAddressDescription">
+      <UniqueIdentifier>{5fd2b54a-0d8d-4e50-b2f4-82613454892a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Monitor">
+      <UniqueIdentifier>{ac0abe9b-7c10-4797-a79a-047777e4b625}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="InjectHelper">
+      <UniqueIdentifier>{607a137d-28e5-4b4e-b010-72e8961da922}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Thread">
+      <UniqueIdentifier>{3e42f8b6-ea17-416a-a28c-00cf4c095d20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MemoryTools\mx64">
+      <UniqueIdentifier>{3f257705-8a45-4435-9430-7494e4841378}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="StackSpof">
+      <UniqueIdentifier>{e4c596ed-6d87-4cc4-9d4b-623da3d93031}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="IRPControl\IRPControl.cpp">
+      <Filter>IRPControl</Filter>
+    </ClCompile>
+    <ClCompile Include="Minifilter\Minifilter.cpp">
+      <Filter>Minifilter</Filter>
+    </ClCompile>
+    <ClCompile Include="Tools\Tools.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFunction\MainFunction.cpp">
+      <Filter>MainFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryTools\MemoryTools.cpp">
+      <Filter>MemoryTools</Filter>
+    </ClCompile>
+    <ClCompile Include="Driver.cpp">
+      <Filter>Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="HideDriver\HideDriver.cpp">
+      <Filter>HideDriver</Filter>
+    </ClCompile>
+    <ClCompile Include="Monitor\Monitor.cpp">
+      <Filter>Monitor</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread\Thread.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="InjectHelper\InjectHelper.cpp">
+      <Filter>InjectHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryTools\mx64\mx64.cpp">
+      <Filter>MemoryTools\mx64</Filter>
+    </ClCompile>
+    <ClCompile Include="StackSpof\StackSpof.cpp">
+      <Filter>StackSpof</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="IRPControl\IRPControl.h">
+      <Filter>IRPControl</Filter>
+    </ClInclude>
+    <ClInclude Include="IRPControl\IRPControlCode.h">
+      <Filter>IRPControl</Filter>
+    </ClInclude>
+    <ClInclude Include="Minifilter\Minifilter.h">
+      <Filter>Minifilter</Filter>
+    </ClInclude>
+    <ClInclude Include="IRPControl\MyStruct.h">
+      <Filter>IRPControl</Filter>
+    </ClInclude>
+    <ClInclude Include="Tools\Tools.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFunction\MainFunction.h">
+      <Filter>MainFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryTools\MemoryTools.h">
+      <Filter>MemoryTools</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="HideDriver\HideDriver.h">
+      <Filter>HideDriver</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryTools\VirtualAddressDescription\VirtualAddressDescription.h">
+      <Filter>MemoryTools\VirtualAddressDescription</Filter>
+    </ClInclude>
+    <ClInclude Include="Monitor\Monitor.h">
+      <Filter>Monitor</Filter>
+    </ClInclude>
+    <ClInclude Include="Thread\Thread.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="InjectHelper\InjectHelper.h">
+      <Filter>InjectHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryTools\mx64\mx64.h">
+      <Filter>MemoryTools\mx64</Filter>
+    </ClInclude>
+    <ClInclude Include="StackSpof\StackSpof.h">
+      <Filter>StackSpof</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

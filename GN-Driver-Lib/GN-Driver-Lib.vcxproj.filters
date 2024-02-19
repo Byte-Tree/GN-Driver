@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Driver">
+      <UniqueIdentifier>{ef4fb3a8-5695-43e2-ae3a-18d143538fb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Driver\ReflectiveLoader">
+      <UniqueIdentifier>{506625c0-623d-436a-8ae4-d69045e89cb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kdmapper">
+      <UniqueIdentifier>{b97560a4-52f4-4f27-b410-4e9be2f1d3f4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Driver\Driver.cpp">
+      <Filter>Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="kdmapper\src\intel_driver.cpp">
+      <Filter>kdmapper</Filter>
+    </ClCompile>
+    <ClCompile Include="kdmapper\src\kdmapper.cpp">
+      <Filter>kdmapper</Filter>
+    </ClCompile>
+    <ClCompile Include="kdmapper\src\portable_executable.cpp">
+      <Filter>kdmapper</Filter>
+    </ClCompile>
+    <ClCompile Include="kdmapper\src\service.cpp">
+      <Filter>kdmapper</Filter>
+    </ClCompile>
+    <ClCompile Include="kdmapper\src\utils.cpp">
+      <Filter>kdmapper</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Driver\GN-ManualMap.h">
+      <Filter>Driver\ReflectiveLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Driver\GN-ReflectiveLoader.h">
+      <Filter>Driver\ReflectiveLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Driver\Driver.h">
+      <Filter>Driver</Filter>
+    </ClInclude>
+    <ClInclude Include="kdmapper\include\intel_driver.hpp">
+      <Filter>kdmapper</Filter>
+    </ClInclude>
+    <ClInclude Include="kdmapper\include\intel_driver_resource.hpp">
+      <Filter>kdmapper</Filter>
+    </ClInclude>
+    <ClInclude Include="kdmapper\include\kdmapper.hpp">
+      <Filter>kdmapper</Filter>
+    </ClInclude>
+    <ClInclude Include="kdmapper\include\nt.hpp">
+      <Filter>kdmapper</Filter>
+    </ClInclude>
+    <ClInclude Include="kdmapper\include\portable_executable.hpp">
+      <Filter>kdmapper</Filter>
+    </ClInclude>
+    <ClInclude Include="kdmapper\include\service.hpp">
+      <Filter>kdmapper</Filter>
+    </ClInclude>
+    <ClInclude Include="kdmapper\include\utils.hpp">
+      <Filter>kdmapper</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

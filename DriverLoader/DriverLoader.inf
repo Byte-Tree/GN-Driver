@@ -1,0 +1,87 @@
+;
+; DriverLoader.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=Sample ; TODO: edit Class
+ClassGuid={78A1C341-4539-11d3-B88D-00C04FAD5171} ; TODO: edit ClassGuid
+Provider=%ManufacturerName%
+CatalogFile=DriverLoader.cat
+DriverVer= ; TODO: set DriverVer in stampinf property pages
+PnpLockDown=1
+
+[DestinationDirs]
+DefaultDestDir = 12
+DriverLoader_Device_CoInstaller_CopyFiles = 11
+
+; ================= Class section =====================
+
+[ClassInstall32]
+Addreg=SampleClassReg
+
+[SampleClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-5
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+DriverLoader.sys  = 1,,
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%DriverLoader.DeviceDesc%=DriverLoader_Device, Root\DriverLoader ; TODO: edit hw-id
+
+[DriverLoader_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+DriverLoader.sys
+
+;-------------- Service installation
+[DriverLoader_Device.NT.Services]
+AddService = DriverLoader,%SPSVCINST_ASSOCSERVICE%, DriverLoader_Service_Inst
+
+; -------------- DriverLoader driver install sections
+[DriverLoader_Service_Inst]
+DisplayName    = %DriverLoader.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\DriverLoader.sys
+
+;
+;--- DriverLoader_Device Coinstaller installation ------
+;
+
+[DriverLoader_Device.NT.CoInstallers]
+AddReg=DriverLoader_Device_CoInstaller_AddReg
+CopyFiles=DriverLoader_Device_CoInstaller_CopyFiles
+
+[DriverLoader_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[DriverLoader_Device_CoInstaller_CopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[DriverLoader_Device.NT.Wdf]
+KmdfService =  DriverLoader, DriverLoader_wdfsect
+[DriverLoader_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="<Your manufacturer name>" ;TODO: Replace with your manufacturer name
+ClassName="Samples" ; TODO: edit ClassName
+DiskName = "DriverLoader Installation Disk"
+DriverLoader.DeviceDesc = "DriverLoader Device"
+DriverLoader.SVCDESC = "DriverLoader Service"
