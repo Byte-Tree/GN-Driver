@@ -1020,9 +1020,9 @@ NTSTATUS MemoryTools::GetSystemVadRootOffset(PRTL_OSVERSIONINFOEXW os_info)
             this->m_eprocess_vadroot_offset = 0x658;
             break;
         }
-        else if (os_info->dwBuildNumber == 19041 || os_info->dwBuildNumber == 19042 || os_info->dwBuildNumber == 19043 ||
-            os_info->dwBuildNumber == 19044 || os_info->dwBuildNumber == 22000 || os_info->dwBuildNumber == 22621/*Win11 22H2*/
-            || os_info->dwBuildNumber == 22631/*Win11 23H2*/)
+        else if (os_info->dwBuildNumber == 19041 || os_info->dwBuildNumber == 19042 || 
+            os_info->dwBuildNumber == 19043 || os_info->dwBuildNumber == 19044 || os_info->dwBuildNumber == 22000 ||
+            os_info->dwBuildNumber == 22621/*Win11 22H2*/ || os_info->dwBuildNumber == 22631/*Win11 23H2*/)
         {
             this->m_eprocess_vadroot_offset = 0x7D8;
             break;
