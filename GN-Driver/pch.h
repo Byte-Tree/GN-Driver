@@ -29,8 +29,8 @@ extern "C"
 
 //劫持通讯
 #define CURRENT_IO_DISPATCH _HACK_IO_DISPATCH
-//kdmapper加载驱动
-#define KDMAPPER_LOAD _ISKDMAPPER
+////kdmapper加载驱动
+//#define KDMAPPER_LOAD _ISKDMAPPER
 
 //Driver Link Name
 #define Driver_Link_Name L"\\??\\GN_NewLinker"

@@ -230,11 +230,9 @@
       <TreatWarningAsError>false</TreatWarningAsError>
       <ExceptionHandling>Async</ExceptionHandling>
       <PreprocessorDefinitions>_INFORELEASE;_WIN10_OR_HIGHER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
       <AdditionalDependencies>fltMgr.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <EntryPointSymbol>CustomDriverEntry</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='InfoRelease7Up|x64'">

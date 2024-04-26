@@ -111,8 +111,8 @@ int main()
 		//if (driver_file_buffer)
 		//	free(driver_file_buffer);
 
-		//bool status = drv.User_Call_InstallSYS();
-		bool status = drv.KdmapperInstallDriver();
+		bool status = drv.User_Call_InstallSYS();
+		//bool status = drv.KdmapperInstallDriver();
 		printf("驱动加载状态：%s\n", status ? "成功" : "失败");
 
 		break;
