@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.33027.164
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34601.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GN-Driver", "GN-Driver\GN-Driver.vcxproj", "{4CFF325C-2199-43D3-AE88-2DEE07663BF1}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GN-LoaderDemo", "GN-LoaderDemo\GN-LoaderDemo.vcxproj", "{8C65BD40-2640-494D-9795-8BB28D34E22C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GN-ReflectiveLoader-DLL-Demo", "GN-ReflectiveLoader-DLL-Demo\GN-ReflectiveLoader-DLL-Demo.vcxproj", "{714ED19E-FFD1-41D2-A73F-0B533B724BE3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GN-Driver-Server", "GN-Driver-Server\GN-Driver-Server.vcxproj", "{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,6 +129,30 @@ Global
 		{714ED19E-FFD1-41D2-A73F-0B533B724BE3}.Release|x64.Build.0 = Release|x64
 		{714ED19E-FFD1-41D2-A73F-0B533B724BE3}.Release|x86.ActiveCfg = Release|Win32
 		{714ED19E-FFD1-41D2-A73F-0B533B724BE3}.Release|x86.Build.0 = Release|Win32
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.Debug|ARM.ActiveCfg = Debug|x64
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.Debug|ARM.Build.0 = Debug|x64
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.Debug|ARM64.ActiveCfg = Debug|x64
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.Debug|ARM64.Build.0 = Debug|x64
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.Debug|x64.ActiveCfg = Debug|x64
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.Debug|x64.Build.0 = Debug|x64
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.Debug|x86.ActiveCfg = Debug|Win32
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.Debug|x86.Build.0 = Debug|Win32
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.InfoRelease|ARM.ActiveCfg = Release|x64
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.InfoRelease|ARM.Build.0 = Release|x64
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.InfoRelease|ARM64.ActiveCfg = Release|x64
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.InfoRelease|ARM64.Build.0 = Release|x64
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.InfoRelease|x64.ActiveCfg = Release|x64
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.InfoRelease|x64.Build.0 = Release|x64
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.InfoRelease|x86.ActiveCfg = Release|Win32
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.InfoRelease|x86.Build.0 = Release|Win32
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.Release|ARM.ActiveCfg = Release|x64
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.Release|ARM.Build.0 = Release|x64
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.Release|ARM64.ActiveCfg = Release|x64
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.Release|ARM64.Build.0 = Release|x64
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.Release|x64.ActiveCfg = Release|x64
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.Release|x64.Build.0 = Release|x64
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.Release|x86.ActiveCfg = Release|Win32
+		{93D15E69-26A5-4DB4-8EE1-4429E7C35C61}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
