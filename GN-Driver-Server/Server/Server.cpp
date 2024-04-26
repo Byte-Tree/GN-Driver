@@ -58,6 +58,10 @@ EnHandleResult Server::OnAccept(ITcpServer* pSender, CONNID dwConnID, UINT_PTR s
 
 		pSender->SetConnectionExtra(dwConnID, client);
 	}
+	catch (const std::shared_ptr<ServerError>& e)
+	{
+		OutPutLog(__FUNCTION__ + std::string(" had exception"), e->what());
+	}
 	catch (const std::exception& e)
 	{
 		OutPutLog(__FUNCTION__ + std::string(" had exception"), e.what());
@@ -89,6 +93,10 @@ EnHandleResult Server::OnReceive(ITcpServer* pSender, CONNID dwConnID, const BYT
 			//std::cout << "data len:" << p_packet->header.data_length << std::endl;
 
 		}
+		catch (const std::shared_ptr<ServerError>& e)
+		{
+			OutPutLog(__FUNCTION__ + std::string(" had exception"), e->what());
+		}
 		catch (const std::exception& e)
 		{
 			OutPutLog(__FUNCTION__ + std::string(" had exception"), e.what());
@@ -106,9 +114,10 @@ EnHandleResult Server::OnSend(ITcpServer* pSender, CONNID dwConnID, const BYTE* 
 
 EnHandleResult Server::OnClose(ITcpServer* pSender, CONNID dwConnID, EnSocketOperation enOperation, int iErrorCode)
 {
+	PClientNode client = nullptr;
+
 	std::cout << __FUNCTION__ << ": connect id:" << dwConnID << std::endl;
 
-	PClientNode client = nullptr;
 	if (pSender->GetConnectionExtra(dwConnID, (PVOID*)&client))
 	{
 		try
@@ -117,6 +126,10 @@ EnHandleResult Server::OnClose(ITcpServer* pSender, CONNID dwConnID, EnSocketOpe
 
 
 			delete client;
+		}
+		catch (const std::shared_ptr<ServerError>& e)
+		{
+			OutPutLog(__FUNCTION__ + std::string(" had exception"), e->what());
 		}
 		catch (const std::exception& e)
 		{
@@ -155,170 +168,6 @@ EnHandleResult Server::OnSend(IUdpNode* pSender, LPCTSTR lpszRemoteAddress, USHO
 
 EnHandleResult Server::OnReceive(IUdpNode* pSender, LPCTSTR lpszRemoteAddress, USHORT usRemotePort, const BYTE* pData, int iLength)
 {
-	//	try {
-	//
-	//		if (TransferModel == 1)
-	//		{
-	//			return HR_OK;
-	//		}
-	//
-	//		TransferHead* ProtocolHead = (TransferHead*)pData;
-	//		if (iLength < sizeof(TransferHead) && ntohs(ProtocolHead->TotalLength) > iLength)
-	//		{
-	//			return HR_OK;
-	//		}
-	//		ClientNode* Client = NULL;
-	//		UINT Seq = ntohl(ProtocolHead->Seq);
-	//		short DialogID = ntohs(ProtocolHead->DialogID);
-	//		UINT Uin = ntohl(ProtocolHead->Uin);
-	//
-	//		short TransferCmd = ntohs(ProtocolHead->TransferCmd);
-	//		UCHAR OptLength = ProtocolHead->OptLength;
-	//
-	//		//printf("[UDP:OnReceive]Uin:%d, TransferCmd:%d, OptLength:%d\n", Uin, TransferCmd, OptLength);
-	//
-	//		size_t len = 0;
-	//		BYTE* p = PBYTE(ProtocolHead + 1);
-	//		UCHAR option[1024];
-	//
-	//		int num = 0;
-	//		switch (TransferCmd)
-	//		{
-	//		case UDP_CMD_LOGIN_SERVER:
-	//		{
-	//
-	//			//udp服务器登录命令
-	//			in_addr LocalIP;
-	//			LocalIP.S_un.S_addr = Read32(p);
-	//			USHORT LocalPort = Read16(p);
-	//#
-	//			//printf("lpszRemoteAddress:%s LocalIP:%s, LocalPort:%d\n", lpszRemoteAddress, inet_ntoa(LocalIP), LocalPort);
-	//			p = option;
-	//
-	//			Write32(p, inet_addr(lpszRemoteAddress));
-	//
-	//			len = p - option;
-	//			SendUdpData(lpszRemoteAddress, usRemotePort, UDP_CMD_LOGIN_SERVER, option, len, Seq, DialogID, Uin);
-	//
-	//
-	//
-	//			break;
-	//		}
-	//
-	//		case UDP_CMD_P2P_GAME_DATA:
-	//		{
-	//			//UDP游戏数据 tcp传输
-	//			Client = GetClient(Uin);
-	//			if (!Client)
-	//			{
-	//				return HR_OK;
-	//			}
-	//			RoomNode* Room = NULL;
-	//			if (Client->RoomID != 0)
-	//			{
-	//				Room = GetRoom(Client->RoomID);
-	//			}
-	//			else if (Client->BorderRoomID != 0)
-	//			{
-	//				Room = GetRoom(Client->BorderRoomID);
-	//			}
-	//			if (!Room)
-	//			{
-	//				return HR_OK;
-	//			}
-	//			len = iLength - sizeof(TransferHead) - OptLength;
-	//			/*printf("TransferCmd:%d iLength:%d\n ", TransferCmd, iLength);
-	//			for (int i = 0; i < iLength; i++)
-	//			{
-	//				printf("%02x ", *(pData + i));
-	//			}
-	//			printf("\n");*/
-	//
-	//			//BYTE* pDstInfo = p;
-	//			//SHORT PlayerID = 0;
-	//			//UINT DstUin = 0;
-	//			BYTE* DataBuf = p + OptLength;
-	//			/*while (OptLength >= 14)
-	//			{
-	//
-	//			// 一个人占6个字节
-	//				PlayerID = Read16(pDstInfo);
-	//				DstUin = Read32(pDstInfo);
-	//				//printf("PlayerID:%d, PlayerUin:%d  ",  PlayerID, PlayerUin);
-	//				//DWORD dwStart = GetTickCount(); //取windows启动到现在的流逝时间(毫秒)
-	//				for (char i2 = 0; i2 < 6; i2++)
-	//				{
-	//					ClientNode* RoomClient = Clients[DstUin];
-	//					if (RoomClient)
-	//					{
-	//						NotifyTranferByTCP(RoomClient, Uin, 0, Seq, DataBuf, len);
-	//					}
-	//				}
-	//
-	//				//DWORD dwUsed = GetTickCount() - dwStart; //计算该函数所消耗的时间
-	//				//printf("Clients Search lost:%d ms\n", dwUsed);
-	//				OptLength -= 6;
-	//			}*/
-	//			//UINT Time = Read32(pDstInfo);
-	//			//UINT Temp = Read32(pDstInfo);
-	//			//printf("\n");
-	//			for (char i2 = 0; i2 < 6; i2++)
-	//			{
-	//				ClientNode* RoomClient = Room->Player[i2];
-	//				if (RoomClient && RoomClient != Client)
-	//				{
-	//					NotifyTranferByTCP(RoomClient, Uin, 0, Seq, DataBuf, len);
-	//				}
-	//			}
-	//			break;
-	//		}
-	//		case UDP_CMD_SHOW_MY_IP_PORT:
-	//		{
-	//			short SrcPlayerID = Read16(p); //src player id
-	//			UINT SrcUin = Read32(p); //src player uin
-	//			in_addr LocalIP;
-	//			LocalIP.S_un.S_addr = Read32(p);
-	//			USHORT LocalPort = Read16(p);
-	//
-	//			//printf("SrcPlayerID:%d, SrcUin:%d\n", SrcPlayerID, SrcUin);
-	//
-	//			p = option;
-	//			Write16(p, SrcPlayerID); //SrcPlayerID
-	//			Write32(p, SrcUin); //SrcUin
-	//			Write32(p, LocalIP.S_un.S_addr); //SrcOuterIP
-	//			Write16(p, LocalPort); //SrcOuterPort
-	//			Write32(p, inet_addr(lpszRemoteAddress)); //SrcInerIP
-	//			Write16(p, usRemotePort); //SrcInnerPort
-	//
-	//
-	//			len = p - option;
-	//			SendUdpData(lpszRemoteAddress, usRemotePort, UDP_CMD_RECV_OTHER_IP_PORT, option, len, Seq, DialogID, Uin);
-	//			break;
-	//		}
-	//		case UDP_CMD_HEART_BEAT:
-	//		{
-	//			//UDP心跳
-	//			//p = option;
-	//			//printf("TransferCmd:%d iLength:%d\n ", TransferCmd, iLength);
-	//			len = iLength - sizeof(TransferHead);
-	//			SendUdpData(lpszRemoteAddress, usRemotePort, UDP_CMD_HEART_BEAT, p, len, Seq, DialogID, Uin);
-	//			break;
-	//		}
-	//		default:
-	//			//printf("TransferCmd:%d iLength:%d\n ", TransferCmd , iLength);
-	//			//len = iLength - sizeof(TransferHead);
-	//			//SendUdpData(lpszRemoteAddress, usRemotePort, TransferCmd, p, len, Seq, DialogID, Uin);
-	//
-	//			break;
-	//		}
-	//
-	//	}
-	//	catch (...)
-	//	{
-	//		printf("UDP Receive Exception!!!\n");
-	//		fflush(stdout);
-	//	}
-
 	return HR_OK;
 }
 
@@ -341,7 +190,7 @@ SERVER_ERROR Server::Running()
 {
 	SERVER_ERROR status = SERVER_SUCCESS;
 
-
+	//this->GetTcpServerPtr()->Get().start
 
 	return status;
 }
