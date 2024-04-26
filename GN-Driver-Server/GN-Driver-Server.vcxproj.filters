@@ -8,11 +8,17 @@
     <Filter Include="Server">
       <UniqueIdentifier>{93e70ff8-49a0-4012-b07a-8e46b7aafed0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{7439ec07-fba4-43f5-a070-c3ee9b4f01b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Server\Server.cpp">
       <Filter>Server</Filter>
+    </ClCompile>
+    <ClCompile Include="Tools\Tools.cpp">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -21,6 +27,9 @@
     </ClInclude>
     <ClInclude Include="Server\ServerError.h">
       <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Tools\Tools.h">
+      <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

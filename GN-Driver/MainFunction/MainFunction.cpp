@@ -158,9 +158,9 @@ void MainFunction(PDRIVER_OBJECT pdriverobject, PUNICODE_STRING registry_path)
 	injecthelper = new InjectHelper();
 
 #ifndef KDMAPPER_LOAD
-	//if (!NT_SUCCESS(InitMiniFilter(pdriverobject, registry_path)))
-	//	DbgPrint("[GN]:InitMiniFilter() Error");
-	////Delete Driver File
+	if (!NT_SUCCESS(InitMiniFilter(pdriverobject, registry_path)))
+		DbgPrint("[GN]:InitMiniFilter() Error");
+	//Delete Driver File
 	if (!NT_SUCCESS(tools->DeleteDriverFile(&((PKLDR_DATA_TABLE_ENTRY)pdriverobject->DriverSection)->FullDllPath)))
 		DbgPrint("[GN]:DeleteDriverFile() Error");
 #endif

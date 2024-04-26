@@ -23,9 +23,9 @@ int main(int argc, char* argv[])
 	server = std::make_shared<Server>();
 
 	SERVER_ERROR status = server->Running();
+	OutPutLog("Run over", status);
 
 	server.~shared_ptr();
-
 	return 0;
 }
 
