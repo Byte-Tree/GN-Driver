@@ -539,10 +539,10 @@ int main()
 	}
 	case 29:
 	{
-		printf("请输入需要注入的进程id(十进制)：\n");
-		ULONG pid = NULL;
-		scanf("%d", &pid);
-
+		//printf("请输入需要注入的进程id(十进制)：\n");
+		//ULONG pid = NULL;
+		//scanf("%d", &pid);
+				
 		//下载dll
 		char* dll_file = (char*)malloc(1024 * 1024 * 5);
 		int dll_file_size = 0;
@@ -551,9 +551,31 @@ int main()
 		//dll_file_size = drv.DownLoadFile("118.123.202.72:456", "/RemoteFile/GN-DLL-PUBG.dll", dll_file, &dll_http_head);
 		dll_file_size = drv.DownLoadFile("118.123.202.72:456", "/RemoteFile/GN-DLL-CF-IMGUI.dll", dll_file, &dll_http_head);
 		if (dll_file_size > 0)
-			printf("注入状态：%s\n", drv.InjectByKernelHackThreadMemoryLoadEx(pid, (PVOID)(dll_file + dll_http_head), dll_file_size, 3000, _ReadWriteModle::MDL) ? "成功" : "失败");
+			printf("dll下载成功\n");
 		else
 			printf("dll下载失败！\n");
+
+		while (true)
+		{
+			HWND game_window_handle = ::FindWindowA("CrossFire", "穿越火线");
+			if (game_window_handle != NULL)
+			{
+				//获取游戏真实pid
+				int game_pid = NULL;
+				::GetWindowThreadProcessId(game_window_handle, (LPDWORD)&game_pid);
+				//int game_pid = drv->GetProcessPIDW(L"crossfire.exe");
+				if (game_pid == NULL)
+				{
+					::MessageBoxA(::GetActiveWindow(), "未找到游戏！请启动游戏或重启系统后再试", "警告", MB_OK);
+					exit(-1);
+				}
+
+				//进行注入操作 
+				DWORD inject_value = drv.InjectByKernelHackThreadMemoryLoadEx(game_pid, (PVOID)(dll_file + dll_http_head), dll_file_size, 3000, _ReadWriteModle::MDL);
+				printf("注入状态：%s", inject_value ? "成功" : "失败");
+				break;
+			}
+		}
 
 		if (dll_file)
 			free(dll_file);

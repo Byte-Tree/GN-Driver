@@ -41,10 +41,22 @@ void WSKInterface::operator delete(void* pointer)
 
 WSKInterface::WSKInterface()
 {
+	WSK_CLIENT_NPI client;
+	client.ClientContext = nullptr;
+	client.Dispatch = &this->_wsk_client_dispatch;
 
+	NTSTATUS status = WskRegister(&client, &this->_wsk_registration);
+	if (!status)
+		return;
+
+	status = WskCaptureProviderNPI(&this->_wsk_registration, WSK_INFINITE_WAIT, &this->_wsk_provider);
+	if (!status)
+		return;
 }
 
 WSKInterface::~WSKInterface()
 {
+	WskReleaseProviderNPI(&this->_wsk_registration);
+	WskDeregister(&this->_wsk_registration);
 }
 
