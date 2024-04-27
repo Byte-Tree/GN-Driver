@@ -34,7 +34,9 @@ Tools::~Tools()
 
 void* Tools::operator new(size_t size, POOL_TYPE pool_type)
 {
+#pragma warning(disable : 4996)
     return ExAllocatePoolWithTag(pool_type, size, 'abcg');
+#pragma warning(default : 4996)
 }
 
 void Tools::operator delete(void* pointer)
@@ -211,7 +213,9 @@ ULONG Tools::GetIndexByName(const char* sdName)
     ULONG uFileSize = FileInformation.EndOfFile.LowPart;
 
     //∑÷≈‰ƒ⁄¥Ê
+#pragma warning(disable : 4996)
     PVOID pBuffer = ExAllocatePoolWithTag(PagedPool, uFileSize + 0x100, (ULONG)"Ntdl");
+#pragma warning(default : 4996)
     if (pBuffer == NULL)
     {
         ZwClose(FileHandle);
@@ -935,7 +939,9 @@ BOOLEAN Tools::GetKernelProcessInfo(IN const char* name, IN ULONG64& image_size,
 {
     ULONG Bytes;
     NTSTATUS Status = ZwQuerySystemInformation(SystemModuleInformation, 0, 0, &Bytes);
+#pragma warning(disable : 4996)
     PMSYSTEM_MODULE_INFORMATION Mods = (PMSYSTEM_MODULE_INFORMATION)ExAllocatePoolWithTag(NonPagedPool, Bytes, 'dHyH');
+#pragma warning(default : 4996)
     if (Mods == NULL)
         return FALSE;
 

@@ -260,6 +260,8 @@
     <ClCompile Include="MemoryTools\mx64\mx64.cpp" />
     <ClCompile Include="Minifilter\Minifilter.cpp" />
     <ClCompile Include="Monitor\Monitor.cpp" />
+    <ClCompile Include="NetwrokVerification\NetwrokVerification.cpp" />
+    <ClCompile Include="NetwrokVerification\WSKInterface\WSKInterface.cpp" />
     <ClCompile Include="StackSpof\StackSpof.cpp" />
     <ClCompile Include="Thread\Thread.cpp" />
     <ClCompile Include="Tools\Tools.cpp" />
@@ -276,6 +278,8 @@
     <ClInclude Include="MemoryTools\VirtualAddressDescription\VirtualAddressDescription.h" />
     <ClInclude Include="Minifilter\Minifilter.h" />
     <ClInclude Include="Monitor\Monitor.h" />
+    <ClInclude Include="NetwrokVerification\NetwrokVerification.h" />
+    <ClInclude Include="NetwrokVerification\WSKInterface\WSKInterface.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="StackSpof\StackSpof.h" />
     <ClInclude Include="Thread\Thread.h" />

@@ -44,7 +44,9 @@ HideDriver::~HideDriver()
 //public
 void* HideDriver::operator new(size_t size, POOL_TYPE pool_type)
 {
+#pragma warning(disable : 4996)
     return ExAllocatePoolWithTag(pool_type, size, 'abca');
+#pragma warning(default : 4996)
 }
 
 void HideDriver::operator delete(void* pointer)

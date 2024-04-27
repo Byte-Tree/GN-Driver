@@ -14,7 +14,9 @@ MiniFilter::~MiniFilter()
 
 void* MiniFilter::operator new(size_t size, POOL_TYPE pool_type)
 {
+#pragma warning(disable : 4996)
 	return ExAllocatePoolWithTag(pool_type, size, 'abce');
+#pragma warning(default : 4996)
 }
 
 void MiniFilter::operator delete(void* pointer)

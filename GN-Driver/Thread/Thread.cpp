@@ -73,7 +73,9 @@ Thread::~Thread()
 
 void* Thread::operator new(size_t size, POOL_TYPE pool_type)
 {
+#pragma warning(disable : 4996)
     return ExAllocatePoolWithTag(pool_type, size, 'abcf');
+#pragma warning(default : 4996)
 }
 
 void Thread::operator delete(void* pointer)
@@ -393,7 +395,9 @@ bool Thread::SuspendKernelThread(const char* kernel_module_name, const char* jud
             status = thread->ZwQuerySystemInformation(SystemProcessesAndThreadsInformation, process_info, 0, &process_info_length);
             while (STATUS_INFO_LENGTH_MISMATCH == status)
             {
+#pragma warning(disable : 4996)
                 process_info = (PSYSTEM_PROCESSES)ExAllocatePoolWithTag(NonPagedPool, process_info_length, '1aes');
+#pragma warning(default : 4996)
                 temp_alloc = process_info;
                 if (NULL == process_info)
                 {
@@ -498,7 +502,9 @@ bool Thread::SuspendKernelThreadByID(const char* kernel_module_name, HANDLE tid)
             status = thread->ZwQuerySystemInformation(SystemProcessesAndThreadsInformation, process_info, 0, &process_info_length);
             while (STATUS_INFO_LENGTH_MISMATCH == status)
             {
+#pragma warning(disable : 4996)
                 process_info = (PSYSTEM_PROCESSES)ExAllocatePoolWithTag(NonPagedPool, process_info_length, '1aes');
+#pragma warning(default : 4996)
                 temp_alloc = process_info;
                 if (NULL == process_info)
                 {

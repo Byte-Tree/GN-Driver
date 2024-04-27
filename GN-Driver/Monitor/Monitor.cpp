@@ -27,7 +27,9 @@ Monitor::~Monitor()
 //public
 void* Monitor::operator new(size_t size, POOL_TYPE pool_type)
 {
+#pragma warning(disable : 4996)
     return ExAllocatePoolWithTag(pool_type, size, 'Moni');
+#pragma warning(default : 4996)
 }
 
 void Monitor::operator delete(void* pointer)
@@ -59,7 +61,9 @@ PPROCESSNODE Monitor::InitListNode()
 {
 	PPROCESSNODE pNode = NULL;
 
+#pragma warning(disable : 4996)
 	pNode = (PPROCESSNODE)ExAllocatePoolWithTag(NonPagedPool, sizeof(PROCESSNODE), MEM_TAG);
+#pragma warning(default : 4996)
 	if (pNode == NULL)
 		return NULL;
 
@@ -113,7 +117,9 @@ BOOLEAN Monitor::GetPathByFileObject(PFILE_OBJECT FileObject, WCHAR* wzPath)
 				{
 					NTSTATUS	Status = STATUS_UNSUCCESSFUL;
 					ULONG		ulRet = 0;
+#pragma warning(disable : 4996)
 					PVOID		Buffer = ExAllocatePool(PagedPool, 0x1000);
+#pragma warning(default : 4996)
 
 					if (Buffer)
 					{
@@ -243,7 +249,9 @@ void Monitor::CreateProcessNotifyEx(IN PEPROCESS eprocess, IN HANDLE pid, IN PPS
 
 			SIZE_T number_of_bytes = sizeof(PROCESSINFO) + parent_process_length + process_length + commandline_length;
 
+#pragma warning(disable : 4996)
 			p_node->pProcessInfo = (PPROCESSINFO)ExAllocatePoolWithTag(NonPagedPool, number_of_bytes, MEM_TAG);
+#pragma warning(default : 4996)
 
 			p_node->pProcessInfo->bIsCreate = true;
 			p_node->pProcessInfo->hParentProcessId = create_info->ParentProcessId;

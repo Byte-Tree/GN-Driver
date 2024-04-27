@@ -190,7 +190,17 @@ SERVER_ERROR Server::Running()
 {
 	SERVER_ERROR status = SERVER_SUCCESS;
 
-	//this->GetTcpServerPtr()->Get().start
+	if (!this->GetTcpServerPtr()->Get()->Start(L"0.0.0.0", 5999))
+	{
+		::MessageBoxA(::GetActiveWindow(), "start tcp error", "Error", MB_OK);
+		return false;
+	}
+	OutPutLog(__FUNCTION__, "start tcp server success");
+
+	while (true)
+	{
+		Sleep(1);
+	}
 
 	return status;
 }

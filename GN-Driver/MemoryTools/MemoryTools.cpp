@@ -31,7 +31,9 @@ MemoryTools::~MemoryTools()
 //public
 void* MemoryTools::operator new(size_t size, POOL_TYPE pool_type)
 {
+#pragma warning(disable : 4996)
     return ExAllocatePoolWithTag(pool_type, size, 'abcd');
+#pragma warning(default : 4996)
 }
 
 void MemoryTools::operator delete(void* pointer)
@@ -65,7 +67,9 @@ PVOID64 MemoryTools::MDLReadMemory(IN HANDLE pid, IN DWORD64 address, IN ULONG s
         return 0;
     __try
     {
+#pragma warning(disable : 4996)
         tempdata = ExAllocatePool(PagedPool, size);
+#pragma warning(default : 4996)
     }
     __except (1)
     {
@@ -331,7 +335,9 @@ PVOID MemoryTools::GetKernelModuleByZwQuerySystemInformation(IN const char* modu
         ntStatus = thread->ZwQuerySystemInformation(SystemModuleInformation, NULL, NULL, &ulInfoLength);
         if ((ntStatus == STATUS_INFO_LENGTH_MISMATCH))
         {
+#pragma warning(disable : 4996)
             pBuffer = ExAllocatePoolWithTag(PagedPool, ulInfoLength, 'ISQZ');
+#pragma warning(default : 4996)
             if (pBuffer == NULL)
             {
                 DbgPrint("【PrintLoadedModule】Allocate Memory Failed\r\n");
@@ -566,7 +572,9 @@ NTSTATUS MemoryTools::ReadProcessMemoryByMDL(IN HANDLE pid, IN PVOID address, OU
     if (!NT_SUCCESS(PsLookupProcessByProcessId(pid, &eprocess)))
         return STATUS_UNSUCCESSFUL;
 
+#pragma warning(disable : 4996)
     buffer = ExAllocatePoolWithTag(NonPagedPool, size, 'MDLR');
+#pragma warning(default : 4996)
     if (buffer == NULL || !MmIsAddressValid(buffer)) return STATUS_UNSUCCESSFUL;
     RtlZeroMemory(buffer, size);
 
@@ -610,7 +618,9 @@ NTSTATUS MemoryTools::WriteProcessMemoryByMDL(IN HANDLE pid, IN PVOID address, I
     if (!NT_SUCCESS(PsLookupProcessByProcessId(pid, &eprocess)))
         return STATUS_UNSUCCESSFUL;
 
+#pragma warning(disable : 4996)
     buffer = ExAllocatePoolWithTag(NonPagedPool, size, 'MDLW');
+#pragma warning(default : 4996)
     if (buffer == NULL || !MmIsAddressValid(buffer)) return STATUS_UNSUCCESSFUL;
     RtlMoveMemory(buffer, write_data, size);
 
@@ -1245,7 +1255,9 @@ NTSTATUS MemoryTools::SetMemoryVADProtection(IN HANDLE pid, IN ULONG64 virtual_a
         int ULONG_size = sizeof(ULONG);
         ULONG size = VAD_INDO_size * 0x5000 + ULONG_size;
         //分配临时空间
+#pragma warning(disable : 4996)
         PALL_VADS buffer = (PALL_VADS)ExAllocatePoolWithTag(PagedPool, size, 'VAD');
+#pragma warning(default : 4996)
         //根据传入长度得到枚举数量
         ULONG count = (size - sizeof(ULONG)) / sizeof(VAD_INFO);
         //DbgPrint("[GN]:VAD_INDO_size:%d,ULONG_size:%d,size:%d,count:%d,buffer.nCnt:%d\n", VAD_INDO_size, ULONG_size, size, count, buffer->nCnt);
@@ -1313,7 +1325,9 @@ NTSTATUS MemoryTools::HideMemoryByVAD(IN HANDLE pid, IN ULONG64 virtual_address,
         int ULONG_size = sizeof(ULONG);
         ULONG size = VAD_INDO_size * 0x5000 + ULONG_size;
         //分配临时空间
+#pragma warning(disable : 4996)
         PALL_VADS buffer = (PALL_VADS)ExAllocatePoolWithTag(PagedPool, size, 'VAD');
+#pragma warning(default : 4996)
         //根据传入长度得到枚举数量
         ULONG count = (size - sizeof(ULONG)) / sizeof(VAD_INFO);
         //DbgPrint("[GN]:VAD_INDO_size:%d,ULONG_size:%d,size:%d,count:%d,buffer.nCnt:%d\n", VAD_INDO_size, ULONG_size, size, count, buffer->nCnt);

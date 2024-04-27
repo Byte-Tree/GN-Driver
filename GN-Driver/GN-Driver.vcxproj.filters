@@ -40,6 +40,12 @@
     <Filter Include="StackSpof">
       <UniqueIdentifier>{e4c596ed-6d87-4cc4-9d4b-623da3d93031}</UniqueIdentifier>
     </Filter>
+    <Filter Include="NetwrokVerification">
+      <UniqueIdentifier>{dbe6e3e8-6a7a-4d9c-a087-a619b568bc73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NetwrokVerification\WSKInterface">
+      <UniqueIdentifier>{7bd3d623-f3ed-44cd-95be-6991d7c1d769}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IRPControl\IRPControl.cpp">
@@ -77,6 +83,12 @@
     </ClCompile>
     <ClCompile Include="StackSpof\StackSpof.cpp">
       <Filter>StackSpof</Filter>
+    </ClCompile>
+    <ClCompile Include="NetwrokVerification\NetwrokVerification.cpp">
+      <Filter>NetwrokVerification</Filter>
+    </ClCompile>
+    <ClCompile Include="NetwrokVerification\WSKInterface\WSKInterface.cpp">
+      <Filter>NetwrokVerification\WSKInterface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -122,6 +134,12 @@
     </ClInclude>
     <ClInclude Include="StackSpof\StackSpof.h">
       <Filter>StackSpof</Filter>
+    </ClInclude>
+    <ClInclude Include="NetwrokVerification\NetwrokVerification.h">
+      <Filter>NetwrokVerification</Filter>
+    </ClInclude>
+    <ClInclude Include="NetwrokVerification\WSKInterface\WSKInterface.h">
+      <Filter>NetwrokVerification\WSKInterface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

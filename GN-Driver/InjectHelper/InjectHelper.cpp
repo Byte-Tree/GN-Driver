@@ -17,7 +17,9 @@ InjectHelper::~InjectHelper()
 
 void* InjectHelper::operator new(size_t size, POOL_TYPE pool_type)
 {
+#pragma warning(disable : 4996)
     return ExAllocatePoolWithTag(pool_type, size, 'abcb');
+#pragma warning(default : 4996)
 }
 
 void InjectHelper::operator delete(void* pointer)
