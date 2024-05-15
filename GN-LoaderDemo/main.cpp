@@ -550,6 +550,7 @@ int main()
 		//dll_file_size = drv.DownLoadFile("118.123.202.72:456", "/RemoteFile/GN-ReflectiveLoader-DLL-Demo.dll", dll_file, &dll_http_head);
 		//dll_file_size = drv.DownLoadFile("118.123.202.72:456", "/RemoteFile/GN-DLL-PUBG.dll", dll_file, &dll_http_head);
 		dll_file_size = drv.DownLoadFile("118.123.202.72:456", "/RemoteFile/GN-DLL-CF-IMGUI.dll", dll_file, &dll_http_head);
+		//dll_file_size = drv.DownLoadFile("118.123.202.72:456", "/RemoteFile/CF-CheatEngine.dll", dll_file, &dll_http_head);
 		if (dll_file_size > 0)
 			printf("dll下载成功\n");
 		else
@@ -557,6 +558,7 @@ int main()
 
 		while (true)
 		{
+			//HWND game_window_handle = ::FindWindowA("Direct3DWindowClass", "SubD11");
 			HWND game_window_handle = ::FindWindowA("CrossFire", "穿越火线");
 			if (game_window_handle != NULL)
 			{
