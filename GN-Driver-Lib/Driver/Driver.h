@@ -104,11 +104,12 @@ public:
 	// DownLoad File:
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 private:
-	void subString(char str[], char sub[], int index, int len);
+	void SubString(char str[], char sub[], int index, size_t len);
+	__int64 RecvBuffer(SOCKET socket, std::string* p_buffer, int page_size = 40960);
 
 public:
-	int DownLoadFile(IN const char* host, IN const char* get, IN char* bufRecv, IN int* phttpHead);
 	int DownLoadFile(IN const char* host, IN const char* get, IN char* bufRecv, IN int* phttpHead, IN const char* file_name);
+	int DownLoadFile(IN const char* host, IN const char* get, IN std::string* p_buffer);//错误返回-1 成功返回下载到的文件长度
 
 	int DownLoadFileByWinHttp(IN const char* host, IN const wchar_t* file_path, OUT char* buffer);
 	int DownLoadFileByWinHttpEx(IN const char* host, IN const wchar_t* file_path, IN const char* save_path);

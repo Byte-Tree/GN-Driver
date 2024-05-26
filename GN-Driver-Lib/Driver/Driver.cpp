@@ -125,10 +125,9 @@ bool Driver::KdmapperInstallDriver()
             return false;
         }
 
-        char* sys_buffer = (char*)malloc(1024 * 1024 * 10);
+        std::string sys_buffer;
         int sys_buffer_size = 0;
-        int sys_buffer_http_head = 0;
-        sys_buffer_size = this->DownLoadFile(ServerHost, UDriverFilePath, sys_buffer, &sys_buffer_http_head);
+        sys_buffer_size = this->DownLoadFile(ServerHost, UDriverFilePath, &sys_buffer);
         if (sys_buffer_size <= 0)
         {
             ::MessageBoxA(NULL, "下发文件失败，请检查网络！", "警告", MB_OK);
@@ -138,10 +137,9 @@ bool Driver::KdmapperInstallDriver()
         NTSTATUS exitCode = 0;
         bool passAllocationPtr = true;
         //if (!kdmapper::MapDriver(iqvw64e_device_handle, (BYTE*)(sys_buffer + sys_buffer_http_head), 0, 0, free, true, kdmapper::AllocationMode::AllocatePool, passAllocationPtr, callbackExample, &exitCode))
-        if (!kdmapper::MapDriver(iqvw64e_device_handle, (BYTE*)(sys_buffer + sys_buffer_http_head), 0, 0, false, true, kdmapper::AllocationMode::AllocatePool, passAllocationPtr, callbackExample, &exitCode))
+        if (!kdmapper::MapDriver(iqvw64e_device_handle, (BYTE*)(sys_buffer.data()), 0, 0, false, true, kdmapper::AllocationMode::AllocatePool, passAllocationPtr, callbackExample, &exitCode))
         {
             intel_driver::Unload(iqvw64e_device_handle);
-            free(sys_buffer);
             ::MessageBoxA(NULL, "MapDriver error!", "警告", MB_OK);
             return false;
         }
@@ -149,7 +147,6 @@ bool Driver::KdmapperInstallDriver()
         if (!intel_driver::Unload(iqvw64e_device_handle))
             ::MessageBoxA(NULL, "未能卸载因特尔驱动", "提示", MB_OK);
 
-        free(sys_buffer);
         return true;
     }
     else
@@ -961,130 +958,132 @@ bool Driver::SuspendKernelThreadByID(const char* kernel_module_name, HANDLE tid)
 // DownLoad File:
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //private
-void Driver::subString(char str[], char sub[], int index, int len)
+void Driver::SubString(char str[], char sub[], int index, size_t len)
 {
     //判断截取位置是否合理，截取长度是否合理
-    if (index<0 || index>strlen(str) - 1 || len<0 || len>strlen(str) - index) {
+    if (index < 0 || index > strlen(str) - 1 || len < 0 || len > strlen(str) - index)
         return;
-    }
     //循环的次数即截取的长度len 
-    for (int i = 0; i < len; i++) {
+    for (size_t i = 0; i < len; i++)
+    {
         sub[i] = str[index];
         index++;
     }
     sub[len] = '\0';
 }
 
-//public
-int Driver::DownLoadFile(IN const char* host, IN const char* get, IN char* bufRecv, IN int* phttpHead)//错误返回-1 成功返回下载到的文件长度
+__int64 Driver::RecvBuffer(SOCKET socket, std::string* p_buffer, int page_size)
 {
-    __try
+    int recv_len = 0;
+    __int64 total_recv_len = 0;
+
+    while (1)
     {
-        //字符串处理
-        char IP[20] = { 0 };
-        char PORT[10] = { 0 };
-        const char GET[] = "GET ";
-        const char MID[] = " HTTP/1.1\r\nConnection:close\r\nHost:";
-        const char END[] = "\r\n\r\n";
-        subString((char*)host, IP, 0, strstr(host, ":") - host);//去掉:xxx
-        strcpy(PORT, strstr(host, ":") + 1);//得到端口
-        //printf("port:%s\n", PORT);
-        char* getParm = (char*)malloc(strlen(GET) + strlen(get) + strlen(MID) + strlen(host) + strlen(END));
-        sprintf(getParm, "%s%s%s%s%s", GET, get, MID, host, END);
-        //printf("%p\n", getParm);
-        /* 初始化 */
-        WSADATA wsdata = { NULL };
-        WSAStartup(MAKEWORD(2, 2), &wsdata);
+        char* p_temp_buffer = new char[page_size];
+        if (!p_temp_buffer)
+            return 0;
 
-        //const char* hostname = "www.weather.com.cn";
-        //struct hostent* host = gethostbyname(hostname); 
-
-        /* 初始化一个连接服务器的结构体 */
-        sockaddr_in serveraddr = { NULL };
-        serveraddr.sin_family = AF_INET;
-        serveraddr.sin_port = htons(atoi(PORT));
-
-        /* 此处也可以不用这么做，不需要用gethostbyname，把网址ping一下，得出IP也是可以的 */
-        serveraddr.sin_addr.S_un.S_addr = inet_addr(IP);//112.45.36.163
-
-        int sock = socket(AF_INET, SOCK_STREAM, 0);
-        if (sock == -1)
+        recv_len = recv(socket, p_temp_buffer, page_size, 0);//每次收page_size个字节大小的数据
+        if (recv_len > 0)
         {
-            printf("socket error\n");
-            return -1;
-        }
-        //printf("socket succeed\n");
+            p_buffer->append(p_temp_buffer, recv_len);
 
-        if (::connect(sock, (struct sockaddr*)&serveraddr, sizeof(sockaddr_in)) == -1)
-        {
-            //g_dwErr = GetLastError();
-            //printf("connect error %d\n", g_dwErr);
-            closesocket(sock);
-            return -1;
-        }
-        //printf("connect succeed\n");
+            if (p_temp_buffer)
+            {
+                delete[] p_temp_buffer;
+                p_temp_buffer = nullptr;
+            }
 
-        /* 构造GET请求 */
-        const char* bufSend = getParm;//"GET /admin/DL/1.dll HTTP/1.1\r\nConnection:close\r\nHost:112.45.36.163:81\r\n\r\n";
-
-        /* 发送GET请求 */
-        if (send(sock, bufSend, strlen(bufSend), 0) > 0)
-        {
-            //printf("send succeed\n");
+            total_recv_len += recv_len;//计算总长度
         }
         else
         {
-            //g_dwErr = GetLastError();
-            //printf("send error %d\n", g_dwErr);
-            closesocket(sock);
-            return -1;
-        }
-
-        /* 开始接收数据 */
-        int recvLength = 0;
-        int totalLength = 0;
-        int httpHead = 0;
-        int fileLength = 0;
-        char* p = bufRecv;
-        while (1)
-        {
-            recvLength = recv(sock, p, 40960, 0);//每次40k
-            //Sleep(1);
-            if (recvLength > 0)
+            if (p_temp_buffer)
             {
-                p += recvLength;//指针后移
-                totalLength += recvLength;//计算总长度
+                delete[] p_temp_buffer;
+                p_temp_buffer = nullptr;
             }
-            else
-            {
-                break;
-            }
+            break;
         }
-        //printf("共收到%d个字节\n", totalLength);
+    }
 
-        //解析数据包
-        httpHead = strstr(bufRecv, "\r\n\r\n") - bufRecv + 4;//\r\n\r\n 占了4个字节
-        fileLength = atoi(strstr(bufRecv, "Content-Length") + strlen("Content-Length") + 2);//有一个:
-        if (fileLength == 0)
-        {
-            printf("报文错误\n");
-            closesocket(sock);
-            return -1;
-        }
-        else
-        {
-            //printf("响应头长度:%d\n", httpHead);
-            //printf("文件长度:%d\n", fileLength);
-        }
-        *phttpHead = httpHead;//OK这样就好了
+    return total_recv_len;
+}
+
+//public
+int Driver::DownLoadFile(IN const char* host, IN const char* get, IN std::string* p_buffer)
+{
+    //字符串处理
+    char IP[20] = { 0 };
+    char PORT[10] = { 0 };
+    const char GET[5] = "GET ";
+    const char MID[35] = " HTTP/1.1\r\nConnection:close\r\nHost:";
+    const char END[5] = "\r\n\r\n";
+    this->SubString((char*)host, IP, 0, (strstr(host, ":") - host));//去掉:xxx  这里用一个新的char[]来接收
+    strcpy(PORT, strstr(host, ":") + 1);//得到端口
+
+    /* 构造GET请求 */
+    std::string get_param("GET ");
+    get_param.append(get, strlen(get));
+    get_param.append(" HTTP/1.1\r\nConnection:close\r\nHost:");
+    get_param.append(host, strlen(host));
+    get_param.append("\r\n\r\n");
+
+    /* 初始化WSA */
+    WSADATA wsdata = { NULL };
+    WSAStartup(MAKEWORD(2, 2), &wsdata);
+
+    //const char* hostname = "www.weather.com.cn";
+    //struct hostent* host = gethostbyname(hostname); 
+
+    /* 初始化一个连接服务器的结构体 */
+    sockaddr_in serveraddr = { NULL };
+    serveraddr.sin_family = AF_INET;
+    serveraddr.sin_port = htons(atoi(PORT));
+    /* 此处也可以不用这么做，不需要用gethostbyname，把网址ping一下，得出IP也可以 */
+    serveraddr.sin_addr.S_un.S_addr = inet_addr(IP);
+
+    SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock == -1)
+    {
+        OutputDebugStringA("create socket error");
+        return -1;
+    }
+    if (::connect(sock, (struct sockaddr*)&serveraddr, sizeof(sockaddr_in)) == -1)
+    {
         closesocket(sock);
-        return fileLength;
+        return -1;
     }
-    __except (EXCEPTION_EXECUTE_HANDLER)
+
+    /* 发送GET请求 */
+    //get_param //"GET /admin/DL/1.dll HTTP/1.1\r\nConnection:close\r\nHost:112.45.36.163:81\r\n\r\n";
+    if (!(send(sock, get_param.data(), (int)get_param.size(), 0) > 0))
     {
-        OutputDebugStringA("[GN]:DownLoad Error, return 00");
-        return 0;
+        OutputDebugStringA("send get param error");
+        closesocket(sock);
+        return -1;
     }
+
+    /* 开始接收数据 */
+    DWORD64 http_header = 0;
+    int file_length = 0;
+    std::string temp_buffer;
+    auto total_recv_len = this->RecvBuffer(sock, &temp_buffer);
+
+    //解析数据包
+    http_header = strstr(temp_buffer.data(), "\r\n\r\n") - temp_buffer.data() + 4;//\r\n\r\n 占了4个字节
+    file_length = atoi(strstr(temp_buffer.data(), "Content-Length") + strlen("Content-Length") + 2);//有一个:
+    if (file_length == 0)
+    {
+        closesocket(sock);
+        return -1;
+    }
+
+    p_buffer->clear();
+    p_buffer->append(temp_buffer.substr(http_header, temp_buffer.size() - http_header));
+
+    closesocket(sock);
+    return file_length;
 }
 
 int Driver::DownLoadFile(IN const char* host, IN const char* get, IN char* bufRecv, IN int* phttpHead, IN const char* file_name)//错误返回-1 成功返回下载到的文件长度
@@ -1099,7 +1098,7 @@ int Driver::DownLoadFile(IN const char* host, IN const char* get, IN char* bufRe
         const char MID[] = " HTTP/1.1\r\nConnection:close\r\nHost:";
         const char END[] = "\r\n\r\n";
         //OutputDebugStringA("[GN]:1");
-        subString((char*)host, IP, 0, strstr(host, ":") - host);//去掉:xxx
+        SubString((char*)host, IP, 0, strstr(host, ":") - host);//去掉:xxx
         //OutputDebugStringA("[GN]:2");
         strcpy(PORT, strstr(host, ":") + 1);//得到端口
         //printf("port:%s\n", PORT);
@@ -1226,7 +1225,7 @@ int Driver::DownLoadFileByWinHttp(IN const char* host, IN const wchar_t* file_pa
     DWORD host_port = 0;
 
     //解析ip地址
-    this->subString((char*)host, temp_host_name, 0, strstr(host, ":") - host);
+    this->SubString((char*)host, temp_host_name, 0, strstr(host, ":") - host);
     this->charTowchar(temp_host_name, host_name);
     //OutputDebugStringA_1Param("[GN]:ip：%S", host_name);
 
@@ -1316,7 +1315,7 @@ int Driver::DownLoadFileByWinHttpEx(IN const char* host, IN const wchar_t* file_
     DWORD host_port = 0;
 
     //解析ip地址
-    this->subString((char*)host, temp_host_name, 0, strstr(host, ":") - host);
+    this->SubString((char*)host, temp_host_name, 0, strstr(host, ":") - host);
     this->charTowchar(temp_host_name, host_name);
     //OutputDebugStringA_1Param("[GN]:ip：%S", host_name);
 

