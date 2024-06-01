@@ -155,65 +155,53 @@ bool Driver::KdmapperInstallDriver()
 
 bool Driver::User_Call_InstallSYS()
 {
-    int status = false;
+    //判断驱动是否加载成功
+    ULONG dwWrite;
+    PVOID return_buffer = NULL;
+    ModuleStruct data = { NULL };
 
-    //GetCurrentDirectoryA(4096, this->sysfilepath);
-    //strcat(this->sysfilepath, "\\GN-Driver.sys");
-    //char* driver_file_buffer = (char*)malloc(1024 * 1024 * 3);
-    //int driver_file_buffer_size = 0;
-    //int driver_file_buffer_http_head = 0;
-    //driver_file_buffer_size = this->DownLoadFile("112.18.159.36:456", "/RemoteFile/sys/GN-Driver.sys", driver_file_buffer, &driver_file_buffer_http_head, this->sysfilepath);
-    //Sleep(5);
-    //if (driver_file_buffer_size > 0)
-    //{
-    //    sprintf_s(this->sysfilename, "GN-Driver.sys");
-    //    //drv.MyClearService(drv.sysfilename);
-    //    status = this->InstallSYS(this->sysfilename, this->sysfilepath);
-    //    if (status == 2)
-    //    {
-    //        this->MyDeleteFile();
-    //        status = true;
-    //    }
-    //}
-    //else
-    //{
-    //    MessageBoxA(NULL, "驱动加载失败（文件下发失败,请检查网络连接）！", "警告", MB_OK);
-    //    return false;
-    //}
-    //if (driver_file_buffer)
-    //    free(driver_file_buffer);
+    data.control_code = CTL_CODE(FILE_DEVICE_UNKNOWN, 0x80C, METHOD_BUFFERED, FILE_ANY_ACCESS);
 
+    HANDLE hDevice = CreateFile(DEVICE_LINK_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+#if CURRENT_IO_DISPATCH==_HACK_IO_DISPATCH
+    DeviceIoControl(hDevice, 0, &data, sizeof(data), &return_buffer, sizeof(return_buffer), &dwWrite, NULL);
+#else
+    DeviceIoControl(hDevice, CTL_CODE(FILE_DEVICE_UNKNOWN, 0x80C, METHOD_BUFFERED, FILE_ANY_ACCESS), &data, sizeof(data), &return_buffer, sizeof(return_buffer), &dwWrite, NULL);
+#endif
+    CloseHandle(hDevice);
 
-    //if (!this->GetProcessPIDW(L"GN-INITDRIVER.exe"))
-    //{
-    //    MessageBoxA(NULL, "出现错误，请联系开发者", "警告", MB_OK);
-    //    exit(-1);
-    //}
-
-    GetCurrentDirectoryA(4096, this->sysfilepath);
-    strcat(this->sysfilepath, "\\GN-Driver.sys");
-    int driver_file_buffer_size = this->DownLoadFileByWinHttpEx(ServerHost, DriverFilePath, this->sysfilepath);
-    //Sleep(5);
-    if (driver_file_buffer_size > 0)
+    //printf("[GN]:HelloDriver value:%p\n", return_buffer);
+    if ((int)return_buffer != 0x123)
     {
-        sprintf_s(this->sysfilename, "GN-Driver.sys");
-        this->MyClearService(this->sysfilename);
-        status = this->InstallSYS(this->sysfilename, this->sysfilepath);
-        OutputDebugStringA_2Param("[GN]:%s-> InstallSYS():%d", __FUNCTION__, status);
-        if ((status == 2) || (status != true))
+        int status = false;
+
+        GetCurrentDirectoryA(4096, this->sysfilepath);
+        strcat(this->sysfilepath, "\\GN-Driver.sys");
+        int driver_file_buffer_size = this->DownLoadFileByWinHttpEx(ServerHost, DriverFilePath, this->sysfilepath);
+        //Sleep(5);
+        if (driver_file_buffer_size > 0)
         {
-            //返回2：已开启服务，不需要重新加载
-            this->MyDeleteFile();
-            status = false;
+            sprintf_s(this->sysfilename, "GN-Driver.sys");
+            this->MyClearService(this->sysfilename);
+            status = this->InstallSYS(this->sysfilename, this->sysfilepath);
+            OutputDebugStringA_2Param("[GN]:%s-> InstallSYS():%d", __FUNCTION__, status);
+            if ((status == 2) || (status != true))
+            {
+                //返回2：已开启服务，不需要重新加载
+                this->MyDeleteFile();
+                status = false;
+            }
         }
+        else
+        {
+            MessageBoxA(NULL, "驱动加载失败（文件下发失败,请检查网络连接）！", "警告", MB_OK);
+            return false;
+        }
+
+        return status;
     }
     else
-    {
-        MessageBoxA(NULL, "驱动加载失败（文件下发失败,请检查网络连接）！", "警告", MB_OK);
-        return false;
-    }
-
-    return status;
+        return true;
 }
 
 bool Driver::User_Call_UninstallSYS()
@@ -3422,6 +3410,8 @@ DWORD Driver::mInjectByKernelHackThreadMemoryLoad(IN ULONG pid, IN PVOID dll_fil
     OutputDebugStringA_1Param("[GN]:memory_loader_shellcode64_address:%p", p_memory_loader_shellcode);
     OutputDebugStringA_1Param("[GN]:memory_loader_shellcode64_param_address:%p", p_memory_loader_shellcode_param);
 #endif
+
+    ::Sleep(50000);
 
     //进入内核劫持线程
     bool return_value = this->KernelHackThread(pid, (ULONG64)p_memory_loader_shellcode_param, p_memory_loader_shellcode, kernel_wait_millisecond, readwrite_modle);

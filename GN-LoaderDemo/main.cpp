@@ -553,8 +553,8 @@ int main()
 
 		while (true)
 		{
-			//HWND game_window_handle = ::FindWindowA("Direct3DWindowClass", "SubD11");
-			HWND game_window_handle = ::FindWindowA("CrossFire", "穿越火线");
+			HWND game_window_handle = ::FindWindowA("Direct3DWindowClass", "SubD11");
+			//HWND game_window_handle = ::FindWindowA("CrossFire", "穿越火线");
 			if (game_window_handle != NULL)
 			{
 				//获取游戏真实pid
